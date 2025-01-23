@@ -44,8 +44,8 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-6">Other Services</h3>
             <ul className="space-y-4">
               <li><Link to="/blog" className="hover:text-blue-300 transition-colors">Blog</Link></li>
-              <li><a href="https://testamplify.com/" className="hover:text-blue-300 transition-colors">Career Advancement</a></li>
-              <li><a href="https://mini-bank.testamplify.com/" className="hover:text-blue-300 transition-colors">Demo-Site</a></li>
+              <li><a href="https://testamplify.com/" target="_blank" className="hover:text-blue-300 transition-colors">Career Advancement</a></li>
+              <li><a href="https://mini-bank.testamplify.com/" target="_blank" className="hover:text-blue-300 transition-colors">Demo-Site</a></li>
             </ul>
           </div>
 
@@ -53,18 +53,18 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-6">Connect With Us</h3>
             <div className="flex space-x-4">
-              <a href="#x" className="hover:text-blue-300 transition-colors" aria-label="X (formerly Twitter)">
+              <a href="https://x.com/testamped" target="_blank" className="hover:text-blue-300 transition-colors" aria-label="X (formerly Twitter)">
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
-              <a href="#facebook" className="hover:text-blue-300 transition-colors">
+              <a href="https://www.facebook.com/testamped" target="_blank" className="hover:text-blue-300 transition-colors">
                 <Facebook className="w-6 h-6" />
               </a>
-              <a href="#instagram" className="hover:text-blue-300 transition-colors">
+              <a href="https://www.instagram.com/testamped" target="_blank" className="hover:text-blue-300 transition-colors">
                 <Instagram className="w-6 h-6" />
               </a>
-              <a href="https://www.linkedin.com/company/testamplified/" className="hover:text-blue-300 transition-colors">
+              <a href="https://www.linkedin.com/company/testamplified/" target="_blank" className="hover:text-blue-300 transition-colors">
                 <Linkedin className="w-6 h-6" />
               </a>
             </div>
