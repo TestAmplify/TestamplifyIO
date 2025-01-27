@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, Zap } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 const PricingTier = ({
   name, 
@@ -17,7 +17,8 @@ const PricingTier = ({
   highlighted?: boolean;
   onGetStarted: () => void;
 }) => (
-  <div className={`bg-white rounded-2xl shadow-xl ${highlighted ? 'ring-2 ring-blue-600 scale-105' : ''}`}>
+  <div className={`bg-white rounded-2xl shadow-xl relative cursor-pointer
+   hover:border-blue-500 hover:border-2 ${highlighted ? 'ring-2 ring-blue-600' : ''}`}>
     <div className="p-8">
       <h3 className="text-xl font-semibold text-gray-900 mb-2">{name}</h3>
       <div className="flex items-baseline mb-2">
@@ -106,7 +107,7 @@ const PricingSection = () => {
             Choose the perfect plan for your testing needs. All plans include our core AI-powered testing features.
           </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {plans.map((plan) => (
             <PricingTier key={plan.name} {...plan} onGetStarted={handleGetStarted} />
           ))}
