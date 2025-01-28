@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/blog",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blog/(.*)",
+      "destination": "/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -18,11 +26,6 @@
   ],
   "cleanUrls": true,
   "trailingSlash": false,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/blog", "dest": "/index.html" },
-    { "src": "/blog/(.*)", "dest": "/index.html" }
-  ],
   "github": {
     "enabled": true,
     "silent": false
