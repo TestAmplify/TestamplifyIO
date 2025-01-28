@@ -1,7 +1,8 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, User, Clock, Calendar } from 'lucide-react';
+import { ArrowLeft, User, Clock, Calendar, Tag } from 'lucide-react';
 import { blogs } from '../data/blogs';
+import DOMPurify from 'dompurify';
 
 const BlogPost = () => {
   const { id } = useParams();
@@ -26,10 +27,14 @@ const BlogPost = () => {
     );
   }
 
+  const createMarkup = (content: string) => {
+    return { __html: DOMPurify.sanitize(content) };
+  };
+
   return (
-    <div className="pt-16">
+    <article className="pt-16 bg-gray-50">
       {/* Hero Section with Image */}
-      <div className="relative h-[600px]">
+      <div className="relative h-[400px] md:h-[600px]">
         <img
           src={blog.image}
           alt={blog.title}
@@ -38,8 +43,12 @@ const BlogPost = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-end pb-12">
             <div className="text-white">
-              <h1 className="text-5xl font-bold mb-6 leading-tight">{blog.title}</h1>
-              <div className="flex items-center gap-6 text-gray-200">
+              <div className="flex items-center gap-2 text-sm text-blue-300 font-semibold mb-4">
+                <Tag className="w-4 h-4" />
+                {blog.category}
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight">{blog.title}</h1>
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-200 text-sm sm:text-base">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4" />
                   {blog.author}
@@ -59,43 +68,44 @@ const BlogPost = () => {
       </div>
 
       {/* Content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <button
-          onClick={() => navigate('/blog')}
-          className="mb-8 inline-flex items-center text-[#142e84] hover:text-[#142e84]/80"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Blog
-        </button>
+      <div className="bg-white shadow-sm">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <button
+            onClick={() => navigate('/blog')}
+            className="mb-8 inline-flex items-center text-[#142e84] hover:text-[#142e84]/80 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Blog
+          </button>
 
-        <div className="prose prose-lg max-w-none">
-          <p className="text-2xl text-gray-600 mb-12 font-light leading-relaxed">{blog.description}</p>
-          <div className="space-y-8">
-            {blog.content.split('\n\n').map((paragraph, index) => {
-              if (paragraph.startsWith('###')) {
-                // Heading
-                return (
-                  <h3 key={index} className="text-2xl font-bold text-gray-900 mt-12 mb-6">
-                    {paragraph.replace('### ', '')}
-                  </h3>
-                );
-              } else if (paragraph.startsWith('```')) {
-                // Code block
-                const code = paragraph.split('\n').slice(1, -1).join('\n');
-                return (
-                  <pre key={index} className="bg-gray-900 text-gray-100 p-6 rounded-lg overflow-x-auto">
-                    <code>{code}</code>
-                  </pre>
-                );
-              } else {
-                // Regular paragraph
-                return <p key={index} className="text-gray-700 leading-relaxed">{paragraph}</p>;
-              }
-            })}
+          <div className="prose prose-lg max-w-none">
+            <p className="text-xl sm:text-2xl text-gray-600 mb-12 font-light leading-relaxed border-b border-gray-100 pb-8">
+              {blog.description}
+            </p>
+            
+            <div 
+              className="blog-content"
+              dangerouslySetInnerHTML={createMarkup(blog.content)}
+            />
           </div>
         </div>
+      </div>
+
+      {/* Author Section */}
+      <div className="bg-gray-50 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+              <User className="w-8 h-8 text-gray-500" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">{blog.author}</h3>
+              <p className="text-gray-600">Technical Content Writer</p>
+            </div>
+          </div>
         </div>
       </div>
+    </article>
   );
 };
 
