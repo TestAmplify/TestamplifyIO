@@ -9,5 +9,14 @@
     { "handle": "filesystem" },
     { "src": "/blog", "dest": "/index.html" },
     { "src": "/blog/(.*)", "dest": "/index.html" }
-  ]
+  ],
+  "github": {
+    "enabled": true,
+    "silent": false
+  },
+  "build": {
+    "env": {
+      "CACHE_BUST": "1"
+    }
+  }
 } 
