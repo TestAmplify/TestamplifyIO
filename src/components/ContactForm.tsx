@@ -52,7 +52,7 @@ const ContactForm = () => {
       //   throw new Error(data.data?.error?.message || data.error || );
       // }
 
-      toast.success('Thank you! We will get back to you soon.');
+      toast.success(data?.message ?? 'Thank you! We will get back to you soon.');
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {
       console.error('Error:', error);
