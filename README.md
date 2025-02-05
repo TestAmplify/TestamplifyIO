@@ -6,3 +6,4 @@ Fix bugs
 ## Repository created by Bolt to GitHub extension
 ## new updates on deploy
 ## update contact us endpoint to testamplify platform be-url
+## fix error and success message in contact form
