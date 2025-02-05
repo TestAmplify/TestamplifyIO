@@ -41,10 +41,16 @@ const ContactForm = () => {
 
       const data = await response.json();
 
-      // Check if the response contains an error, even if status is 200
-      if (data.data?.error || !data.success) {
-        throw new Error(data.data?.error?.message || data.error || 'Failed to send message');
+      console.log('Response:', data);
+
+      if (!response.ok) {
+        throw new Error(data?.message || 'Failed to send message');
       }
+
+      // Check if the response contains an error, even if status is 200
+      // if (data.data?.error || !data.success) {
+      //   throw new Error(data.data?.error?.message || data.error || );
+      // }
 
       toast.success('Thank you! We will get back to you soon.');
       setFormData({ name: '', email: '', message: '' });
