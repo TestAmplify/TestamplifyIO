@@ -1,4 +1,4 @@
-# sb1-wovye3dt
+# Testamplify.io
 
 Fix bugs
 ## Update blog post styling
