@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Mail, MessageSquare, User, Loader2 } from 'lucide-react';
-import { sendContactEmail } from '../lib/resend';
+// import { sendContactEmail } from '../lib/resend';
+import toast from 'react-hot-toast';
+
+// const BACKEND_URL = import.meta.env.MODE === 'development' 
+//   ? 'http://localhost:5000'
+//   : 'https://your-production-backend-url.com';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -8,30 +14,45 @@ const ContactForm = () => {
     email: '',
     message: ''
   });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('loading');
-    setErrorMessage('');
-    
-    console.log('Submitting form with data:', { ...formData, email: '***' });
+    setIsSubmitting(true);
 
-    const response = await sendContactEmail(formData);
+    try {
+      // Validate form data
+      if (!formData.name || !formData.email || !formData.message) {
+        throw new Error('Please fill in all fields');
+      }
 
-    if (response.success) {
-      console.log('Form submitted successfully');
-      setStatus('success');
+      const response = await fetch(`${BACKEND_URL}/email/testamplifyio/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          message: formData.message.trim()
+        }),
+      });
+
+      const data = await response.json();
+
+      // Check if the response contains an error, even if status is 200
+      if (data.data?.error || !data.success) {
+        throw new Error(data.data?.error?.message || data.error || 'Failed to send message');
+      }
+
+      toast.success('Thank you! We will get back to you soon.');
       setFormData({ name: '', email: '', message: '' });
-    } else {
-      console.error('Form submission failed:', response.error);
-      setStatus('error');
-      setErrorMessage(
-        response.error === 'API key not configured' 
-          ? 'Email service is not properly configured. Please contact support.'
-          : 'Failed to send message. Please try again later.'
-      );
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to send message');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -96,10 +117,10 @@ const ContactForm = () => {
 
       <button
         type="submit"
-        disabled={status === 'loading'}
+        disabled={isSubmitting}
         className="w-full bg-[#142e84] text-white py-3 px-6 rounded-lg hover:bg-[#142e84]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
-        {status === 'loading' ? (
+        {isSubmitting ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
             Sending...
@@ -108,18 +129,6 @@ const ContactForm = () => {
           'Send Message'
         )}
       </button>
-
-      {status === 'success' && (
-        <div className="p-4 bg-green-100 text-green-700 rounded-lg">
-          Thank you! We'll get back to you soon.
-        </div>
-      )}
-
-      {status === 'error' && (
-        <div className="p-4 bg-red-100 text-red-700 rounded-lg">
-          {errorMessage}
-        </div>
-      )}
     </form>
   );
 };

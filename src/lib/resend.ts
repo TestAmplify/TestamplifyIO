@@ -1,39 +1,28 @@
 import { Resend } from 'resend';
 
-const resendApiKey = import.meta.env.VITE_RESEND_API_KEY;
-const resend = new Resend(resendApiKey);
+const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
 
-export const sendContactEmail = async (data: {
+export const sendContactEmail = async (formData: {
   name: string;
   email: string;
   message: string;
 }) => {
   try {
-    if (!resendApiKey) {
-      console.error('Resend API key is missing');
-      return { success: false, error: 'API key not configured' };
-    }
-
-    console.log('Sending email with data:', { ...data, email: '***' });
-    
-    const response = await resend.emails.send({
-      from: 'TestAmplify <onboarding@resend.dev>',
-      to: 'admin@testamplify.io',
-      subject: `New Contact Form Submission from ${data.name}`,
-      reply_to: data.email,
-      text: `
-Name: ${data.name}
-Email: ${data.email}
-
-Message:
-${data.message}
-      `,
+    const data = await resend.emails.send({
+      from: 'Acme <onboarding@resend.dev>',  // Use Resend's default sender or your verified domain
+      to: [import.meta.env.VITE_TO_EMAIL],    // Your verified recipient email
+      subject: `New Contact Form Submission from ${formData.name}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${formData.name}</p>
+        <p><strong>Email:</strong> ${formData.email}</p>
+        <p><strong>Message:</strong> ${formData.message}</p>
+      `
     });
 
-    console.log('Email sent successfully:', response);
-    return { success: true, data: response };
+    return { success: true, data };
   } catch (error) {
-    console.error('Failed to send email:', error);
+    console.error('Error sending email:', error);
     return { success: false, error };
   }
 };
